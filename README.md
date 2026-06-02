@@ -28,6 +28,7 @@ npm install
 
 ```bash
 npm run dev
+npm run build
 ```
 
 Luego abre la URL local que muestra Vite.
