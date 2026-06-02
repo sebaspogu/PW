@@ -148,25 +148,55 @@ export function AppProvider({ children }) {
 
   const addToCart = (product, size) => {
     if (product.type !== 'store') return
+
+    if (product.stock <= 0) {
+      notify('No hay stock disponible')
+      return
+    }
+
+    const exists = cart.find((item) => item.id === product.id && item.size === size)
+    if (exists && exists.quantity >= product.stock) {
+      notify('No hay más stock disponible')
+      return
+    }
+
     setCart((items) => {
-      const exists = items.find((item) => item.id === product.id && item.size === size)
-      if (exists) return items.map((item) =>
-        item.id === product.id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item,
-      )
+      const existsItem = items.find((item) => item.id === product.id && item.size === size)
+      if (existsItem) {
+        return items.map((item) =>
+          item.id === product.id && item.size === size ? { ...item, quantity: item.quantity + 1 } : item,
+        )
+      }
       return [...items, { id: product.id, size, quantity: 1 }]
     })
+
     notify('Producto agregado al carrito')
   }
 
-  const changeCartQuantity = (id, quantity) => {
+  const changeCartQuantity = (id, size, quantity) => {
+    const product = storeProducts.find((item) => item.id === id)
+    if (!product) return
+
+    if (quantity <= 0) {
+      setCart((items) => items.filter((item) => item.id !== id || item.size !== size))
+      return
+    }
+
+    const nextQuantity = Math.min(quantity, product.stock)
     setCart((items) =>
       items
-        .map((item) => (item.id === id ? { ...item, quantity: Math.max(1, quantity) } : item))
+        .map((item) =>
+          item.id === id && item.size === size ? { ...item, quantity: nextQuantity } : item,
+        )
         .filter((item) => item.quantity > 0),
     )
+
+    if (quantity > product.stock) {
+      notify('Máximo stock alcanzado')
+    }
   }
 
-  const removeFromCart = (id) => setCart((items) => items.filter((item) => item.id !== id))
+  const removeFromCart = (id, size) => setCart((items) => items.filter((item) => item.id !== id || item.size !== size))
 
   const checkout = () => {
     setCart([])

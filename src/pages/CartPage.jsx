@@ -14,19 +14,26 @@ export default function CartPage() {
       <section className="space-y-4">
         <h1 className="text-3xl font-black">Carrito ULIMA STORE</h1>
         {cartDetails.map((item) => (
-          <article key={item.id} className="glass-panel grid gap-4 rounded-lg p-4 sm:grid-cols-[120px_1fr_auto] sm:items-center">
+          <article key={`${item.id}-${item.size || 'default'}`} className="glass-panel grid gap-4 rounded-lg p-4 sm:grid-cols-[120px_1fr_auto] sm:items-center">
             <img className="h-28 w-full rounded-md object-cover sm:w-28" src={item.image} alt={item.name} />
             <div>
               <h2 className="text-lg font-bold">{item.name}</h2>
               <p className="text-sm text-slate-400">{item.category}</p>
               {item.size && <p className="text-sm text-slate-400">Talla: {item.size}</p>}
               <p className="mt-2 font-black text-[#ff7a3d]">{formatPrice(item.price)}</p>
+              <p className="mt-1 text-sm text-slate-400">Stock disponible: {item.stock}</p>
             </div>
             <div className="flex items-center gap-2">
-              <button className="rounded-md border border-white/10 p-2" onClick={() => changeCartQuantity(item.id, item.quantity - 1)}><Minus size={16} /></button>
+              <button className="rounded-md border border-white/10 p-2" onClick={() => changeCartQuantity(item.id, item.size, item.quantity - 1)}><Minus size={16} /></button>
               <span className="w-8 text-center font-bold">{item.quantity}</span>
-              <button className="rounded-md border border-white/10 p-2" onClick={() => changeCartQuantity(item.id, item.quantity + 1)}><Plus size={16} /></button>
-              <button className="rounded-md border border-white/10 p-2 text-red-300" onClick={() => removeFromCart(item.id)}><Trash2 size={16} /></button>
+              <button
+                className="rounded-md border border-white/10 p-2"
+                onClick={() => changeCartQuantity(item.id, item.size, item.quantity + 1)}
+                disabled={item.quantity >= item.stock}
+              >
+                <Plus size={16} />
+              </button>
+              <button className="rounded-md border border-white/10 p-2 text-red-300" onClick={() => removeFromCart(item.id, item.size)}><Trash2 size={16} /></button>
             </div>
           </article>
         ))}
