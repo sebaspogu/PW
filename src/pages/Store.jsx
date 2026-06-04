@@ -14,14 +14,21 @@ export default function Store() {
   const { storeProducts } = useApp()
   const [query, setQuery] = useState('')
   const [category, setCategory] = useState('')
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
 
   const filtered = useMemo(
     () =>
       storeProducts.filter((product) => {
         const text = `${product.name} ${product.description}`.toLowerCase()
-        return text.includes(query.toLowerCase()) && (!category || product.category === category)
+        const matchQuery = text.includes(query.toLowerCase())
+        const matchCat = !category || product.category === category
+        const matchMin = !minPrice || product.price >= Number(minPrice)
+        const matchMax = !maxPrice || product.price <= Number(maxPrice)
+
+        return matchQuery && matchCat && matchMin && matchMax
       }),
-    [storeProducts, query, category],
+    [storeProducts, query, category, minPrice, maxPrice],
   )
 
   return (
@@ -42,8 +49,17 @@ export default function Store() {
       </div>
 
       <div className="glass-panel grid gap-3 rounded-lg p-4 lg:grid-cols-[1fr_auto]">
-        <SearchBar value={query} onChange={setQuery} placeholder="Buscar productos oficiales" />
-        <FilterBar category={category} setCategory={setCategory} categories={categories.store} />
+        <SearchBar value={query} onChange={setQuery} placeholder="Buscar por producto o descripcion" />
+
+        <FilterBar
+          category={category}
+          setCategory={setCategory}
+          categories={categories.store}
+          minPrice={minPrice}
+          setMinPrice={setMinPrice}
+          maxPrice={maxPrice}
+          setMaxPrice={setMaxPrice}
+        />
       </div>
 
       <ProductGrid products={filtered} renderItem={(product) => <StoreProductCard key={product.id} product={product} />} />

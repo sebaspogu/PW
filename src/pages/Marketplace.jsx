@@ -14,13 +14,22 @@ export default function Marketplace() {
   const [category, setCategory] = useState('')
   const [condition, setCondition] = useState('')
 
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
+
   const filtered = useMemo(
     () =>
       marketplaceProducts.filter((product) => {
         const text = `${product.title} ${product.description} ${product.sellerName}`.toLowerCase()
-        return text.includes(query.toLowerCase()) && (!category || product.category === category) && (!condition || product.condition === condition)
+        const matchQuery = text.includes(query.toLowerCase())
+        const matchCat = !category || product.category === category
+        const matchCond = !condition || product.condition === condition
+        const matchMin = !minPrice || product.price >= Number(minPrice)
+        const matchMax = !maxPrice || product.price <= Number(maxPrice)
+
+        return matchQuery && matchCat && matchCond && matchMin && matchMax
       }),
-    [marketplaceProducts, query, category, condition],
+    [marketplaceProducts, query, category, condition, minPrice, maxPrice],
   )
 
   return (
@@ -37,7 +46,19 @@ export default function Marketplace() {
       </div>
       <div className="glass-panel grid gap-3 rounded-lg p-4 lg:grid-cols-[1fr_auto]">
         <SearchBar value={query} onChange={setQuery} placeholder="Buscar por producto, descripcion o vendedor" />
-        <FilterBar category={category} setCategory={setCategory} condition={condition} setCondition={setCondition} categories={categories.marketplace} conditions={categories.conditions} />
+
+        <FilterBar
+          category={category}
+          setCategory={setCategory}
+          condition={condition}
+          setCondition={setCondition}
+          categories={categories.marketplace}
+          conditions={categories.conditions}
+          minPrice={minPrice}
+          setMinPrice={setMinPrice}
+          maxPrice={maxPrice}
+          setMaxPrice={setMaxPrice}
+        />
       </div>
       <ProductGrid products={filtered} renderItem={(product) => <MarketplaceProductCard key={product.id} product={product} />} />
     </div>
