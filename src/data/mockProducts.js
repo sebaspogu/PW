@@ -32,6 +32,7 @@ export const storeProducts = [
     category: 'Prendas de vestir',
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80',
     stock: 18,
+    availableSizes: ['S', 'L'],
     modelType: 'polo',
     modelUrl: '/models/blackshirt.fbx',
     modelScale: 0.02,
@@ -47,6 +48,7 @@ export const storeProducts = [
     category: 'Prendas de vestir',
     image: 'https://images.unsplash.com/photo-1548883354-7622d03aca27?auto=format&fit=crop&w=900&q=80',
     stock: 9,
+    availableSizes: ['M', 'L'],
     modelType: 'casaca',
   },
   {
@@ -57,7 +59,7 @@ export const storeProducts = [
     price: 119.9,
     category: 'Tecnología',
     image: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=900&q=80',
-    stock: 16,
+    stock: 10,
     modelType: 'parlante',
   },
   {
@@ -68,7 +70,7 @@ export const storeProducts = [
     price: 99.9,
     category: 'Tecnología',
     image: 'https://market.ulima.edu.pe/cdn/shop/files/Disenosintitulo_7_13996dbd-1c01-40f9-b437-5072fb91b42f.jpg?v=1763986464&width=600',
-    stock: 22,
+    stock: 7,
     modelType: 'caja',
     modelUrl: '/models/powerbank.fbx',
     modelScale: 0.02,
