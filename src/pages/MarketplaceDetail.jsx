@@ -64,15 +64,7 @@ export default function MarketplaceDetail() {
           <p className="text-sm text-slate-300">Interesados: <span className="font-bold text-[#10b981]">{product.interestedCount || 0}</span></p>
         </div>
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-          {product.status === 'vendido' ? (
-            <Button disabled className="flex-1">Vendido</Button>
-          ) : isOwnProduct ? (
-            <div className="flex-1 rounded-md border border-slate-600 px-3 py-2 text-center text-sm text-slate-400">Tu publicación</div>
-          ) : userIsInterested ? (
-            <Button onClick={handleToggleInterested} className="flex-1 bg-[#ff4b00] hover:bg-[#ff6b1a]">✓ Interesado</Button>
-          ) : (
-            <Button onClick={handleToggleInterested} variant="outline" className="flex-1">Estar interesado</Button>
-          )}
+          
           {!isOwnProduct && product.status !== 'vendido' && (
             <Button onClick={handleAcordarCompra} className="flex-1 bg-[#10b981] text-white hover:bg-[#059669] border-[#10b981]">
               Acordar compra
