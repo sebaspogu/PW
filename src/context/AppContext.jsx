@@ -107,24 +107,28 @@ export function AppProvider({ children }) {
   }
 
   const toggleInterested = (id, userId) => {
-    let wasInterested = false
     setMarketplaceProducts((items) =>
       items.map((item) => {
         if (item.id !== id) return item
+
         const interestedBy = item.interestedBy || []
-        const isInterested = interestedBy.includes(userId)
-        wasInterested = isInterested
-        const nextInterestedBy = isInterested ? interestedBy.filter((uid) => uid !== userId) : [...interestedBy, userId]
+        const isAlreadyInterested = interestedBy.includes(userId)
+
+        if (isAlreadyInterested) return item
+
+        const nextInterestedBy = [...interestedBy, userId]
         const nextCount = nextInterestedBy.length
+
         return {
           ...item,
           interestedBy: nextInterestedBy,
           interestedCount: nextCount,
-          status: nextCount > 0 && item.status !== 'vendido' ? 'interesado' : item.status === 'vendido' ? 'vendido' : 'disponible',
+          status: item.status === 'vendido' ? 'vendido' : 'interesado',
         }
       }),
     )
-    notify(wasInterested ? 'Interés cancelado' : 'Interés registrado')
+
+    notify('Interés registrado automáticamente')
   }
 
   const isUserInterested = (id, userId) => {
