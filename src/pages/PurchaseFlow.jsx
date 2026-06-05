@@ -22,7 +22,7 @@ export default function PurchaseFlow() {
     if (!userIsInterested) {
       toggleInterested(product.id, userId)
     }
-    const waNumber = (product.whatsapp || '').replace(/\D/g, '')
+    const waNumber = product.whatsapp.replace(/\D/g, '')
     window.open(
       `https://wa.me/${waNumber}?text=${encodeURIComponent(
         `Hola, estoy interesado en tu publicación "${product.title}" en el Marketplace de ULIMA.`,
