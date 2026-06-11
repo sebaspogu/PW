@@ -20,7 +20,7 @@ export default function StoreDetail() {
     if (product) {
       addRecentlyViewed(product)
     }
-  }, [product?.id])
+  }, [addRecentlyViewed, product])
 
   if (!product) return <EmptyState title="Producto oficial no encontrado" />
 
@@ -40,6 +40,10 @@ export default function StoreDetail() {
               modelType={product.modelType}
               modelUrl={product.modelUrl}
               modelScale={product.modelScale || 1}
+              modelPosition={product.modelPosition}
+              modelRotation={product.modelRotation}
+              modelAnimation={product.modelAnimation}
+              modelAutoRotate={product.modelAutoRotate}
             />
           )}
         </Suspense>

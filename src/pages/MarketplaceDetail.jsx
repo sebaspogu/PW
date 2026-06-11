@@ -10,27 +10,20 @@ export default function MarketplaceDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
 
-  const { marketplaceProducts, toggleInterested, isUserInterested, user, addRecentlyViewed } = useApp()
+  const { marketplaceProducts, user, addRecentlyViewed } = useApp()
   const product = marketplaceProducts.find((item) => item.id === id)
 
   useEffect(() => {
     if (product) {
       addRecentlyViewed(product)
     }
-  }, [product?.id])
+  }, [addRecentlyViewed, product])
 
   if (!product) return <EmptyState title="Producto no encontrado" text="La publicacion ya no esta disponible." />
 
-  const userId = user?.id || 'guest'
-  const userIsInterested = isUserInterested(product.id, userId)
   const isOwnProduct = user && product.sellerId === user.id
 
   const handleAcordarCompra = () => navigate(`/purchase-flow/${product.id}`)
-
-  const handleToggleInterested = (e) => {
-    e.stopPropagation()
-    toggleInterested(product.id, userId)
-  }
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_0.9fr]">

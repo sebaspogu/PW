@@ -1,4 +1,4 @@
-import { Center, Environment, OrbitControls, useFBX, useGLTF } from '@react-three/drei'
+import { Center, Environment, OrbitControls, useAnimations, useFBX, useGLTF } from '@react-three/drei'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Component, Suspense, useEffect, useRef, useState } from 'react'
 
@@ -92,12 +92,27 @@ function FbxModel({ url, scale = 0.02, position = [0, 0, 0], rotation = [0, 0, 0
   )
 }
 
-function GltfModel({ url, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0] }) {
-  const { scene } = useGLTF(url)
+function GltfModel({ url, scale = 1, position = [0, 0, 0], rotation = [0, 0, 0], animationName, autoRotate = true }) {
+  const { animations, scene } = useGLTF(url)
+  const { actions } = useAnimations(animations, scene)
   const ref = useRef()
 
+  useEffect(() => {
+    const actionEntries = Object.entries(actions)
+    const selectedAction =
+      actionEntries.find(([name]) => name === animationName)?.[1] ??
+      actionEntries.find(([name]) => animationName && name.toLowerCase().includes(animationName.toLowerCase()))?.[1] ??
+      actionEntries[0]?.[1]
+
+    selectedAction?.reset().fadeIn(0.25).play()
+
+    return () => {
+      selectedAction?.fadeOut(0.2)
+    }
+  }, [actions, animationName])
+
   useFrame((_, delta) => {
-    if (ref.current) ref.current.rotation.y += delta * 0.35
+    if (autoRotate && ref.current) ref.current.rotation.y += delta * 0.35
   })
 
   return (
@@ -153,7 +168,7 @@ async function checkModelUrl(url) {
   return (await Promise.all(checks)).every(Boolean)
 }
 
-function ModelContent({ modelType, modelUrl, modelScale, modelPosition, modelRotation }) {
+function ModelContent({ modelType, modelUrl, modelScale, modelPosition, modelRotation, modelAnimation, modelAutoRotate }) {
   const [modelStatus, setModelStatus] = useState({ url: null, canLoad: false })
 
   useEffect(() => {
@@ -181,7 +196,7 @@ function ModelContent({ modelType, modelUrl, modelScale, modelPosition, modelRot
   if (!isCurrentModelChecked) return <LoadingModel />
   if (!canLoadModel) return <Model type={modelType} />
 
-  return <UrlModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} />
+  return <UrlModel url={modelUrl} scale={modelScale} position={modelPosition} rotation={modelRotation} animationName={modelAnimation} autoRotate={modelAutoRotate} />
 }
 
 class ModelErrorBoundary extends Component {
@@ -207,7 +222,7 @@ class ModelErrorBoundary extends Component {
   }
 }
 
-export default function Product3DViewer({ modelType, modelUrl, modelScale, modelPosition, modelRotation }) {
+export default function Product3DViewer({ modelType, modelUrl, modelScale, modelPosition, modelRotation, modelAnimation, modelAutoRotate }) {
   return (
     <div className="h-[320px] overflow-hidden rounded-lg border border-white/10 bg-[#111313]">
       <Canvas camera={{ position: [0, 1.2, 4], fov: 42 }}>
@@ -224,6 +239,8 @@ export default function Product3DViewer({ modelType, modelUrl, modelScale, model
               modelScale={modelScale}
               modelPosition={modelPosition}
               modelRotation={modelRotation}
+              modelAnimation={modelAnimation}
+              modelAutoRotate={modelAutoRotate}
             />
           </Suspense>
         </ModelErrorBoundary>
