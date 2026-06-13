@@ -123,7 +123,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0f1111]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
         <Link to="/" className="flex items-center gap-3">
-          <span className="grid h-10 w-10 place-items-center rounded-md bg-[#ff4b00] font-black text-white">U</span>
+          <img className="h-10 w-10 rounded-md object-contain" src="/images/logo.png" alt="ULIMA Market" />
           <span>
             <span className="block text-base font-black tracking-wide">ULIMA MARKET</span>
             <span className="block text-xs text-slate-400">Marketplace universitario</span>
