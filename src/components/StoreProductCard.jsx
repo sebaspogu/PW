@@ -2,16 +2,18 @@ import { ShoppingCart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useApp } from '../context/useApp'
 import { formatPrice } from '../utils/format'
+import BorderTrail from './BorderTrail'
 import FavoriteButton from './FavoriteButton'
 
 export default function StoreProductCard({ product }) {
   const { addToCart } = useApp()
   return (
-    <article className="overflow-hidden rounded-lg border border-white/10 bg-[#171a1a] transition hover:-translate-y-1 hover:border-[#ff4b00]/70">
-      <Link to={`/store/product/${product.id}`} className="block aspect-[4/3] overflow-hidden bg-black">
+    <article className="group relative overflow-hidden rounded-lg border border-white/10 bg-[#171a1a] transition hover:-translate-y-1 hover:border-[#ff4b00]/25">
+      <BorderTrail />
+      <Link to={`/store/product/${product.id}`} className="relative z-0 block aspect-[4/3] overflow-hidden bg-black">
         <img className="h-full w-full object-cover transition duration-500 hover:scale-105" src={product.image} alt={product.name} />
       </Link>
-      <div className="space-y-3 p-4">
+      <div className="relative z-0 space-y-3 p-4">
         <div className="flex items-start justify-between gap-2">
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-[#ff9b72]">ULIMA STORE</p>

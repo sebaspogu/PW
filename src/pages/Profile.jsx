@@ -1,6 +1,7 @@
 import { Edit3, Trash2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
+import BorderTrail from '../components/BorderTrail'
 import EmptyState from '../components/EmptyState'
 import ProfileCard from '../components/ProfileCard'
 import ProductGrid from '../components/ProductGrid'
@@ -37,11 +38,12 @@ export default function Profile() {
               {publications.map((product) => {
                 const isSold = product.status === 'vendido'
                 return (
-                  <article key={product.id} className={`group relative overflow-hidden rounded-lg border transition ${isSold ? 'border-slate-700 bg-slate-900/50' : 'border-white/10 bg-[#171a1a] hover:border-[#ff4b00]/50'}`}>
-                    <Link to={`/marketplace/product/${product.id}`} className="block h-32 overflow-hidden bg-black">
+                  <article key={product.id} className={`group relative overflow-hidden rounded-lg border transition ${isSold ? 'border-slate-700 bg-slate-900/50' : 'border-white/10 bg-[#171a1a] hover:border-[#ff4b00]/25'}`}>
+                    {!isSold && <BorderTrail />}
+                    <Link to={`/marketplace/product/${product.id}`} className="relative z-0 block h-32 overflow-hidden bg-black">
                       <img className={`h-full w-full object-cover transition duration-500 ${isSold ? 'opacity-40' : 'group-hover:scale-105'}`} src={product.image} alt={product.title} />
                     </Link>
-                    <div className="p-4">
+                    <div className="relative z-0 p-4">
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="line-clamp-2 min-h-[2.5rem] text-sm font-bold">{product.title}</h3>
                         {isSold && <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold uppercase text-slate-400">Vendido</span>}

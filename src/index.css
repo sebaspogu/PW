@@ -58,3 +58,48 @@ textarea {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+
+@property --trail-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    conic-gradient(
+      from var(--trail-angle),
+      transparent 0deg,
+      transparent 245deg,
+      rgba(255, 122, 61, 0.18) 280deg,
+      rgba(255, 75, 0, 0.95) 312deg,
+      rgba(255, 203, 164, 0.72) 334deg,
+      transparent 360deg
+    );
+  filter: drop-shadow(0 0 10px rgba(255, 75, 0, 0.42));
+  transition: opacity 220ms ease;
+  animation: border-trail-spin 2.4s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.group:hover > .border-trail,
+.group:focus-within > .border-trail {
+  opacity: 1;
+}
+
+@keyframes border-trail-spin {
+  to {
+    --trail-angle: 360deg;
+  }
+}

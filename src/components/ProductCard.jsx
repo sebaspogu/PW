@@ -1,6 +1,7 @@
 import { ArrowRight, Star } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { formatPrice } from '../utils/format'
+import BorderTrail from './BorderTrail'
 import FavoriteButton from './FavoriteButton'
 
 export default function ProductCard({ product }) {
@@ -9,8 +10,9 @@ export default function ProductCard({ product }) {
   const href = isStore ? `/store/product/${product.id}` : `/marketplace/product/${product.id}`
 
   return (
-    <article className="group overflow-hidden rounded-lg border border-white/10 bg-[#171a1a] transition hover:-translate-y-1 hover:border-[#ff4b00]/70">
-      <div className="relative aspect-[4/3] overflow-hidden bg-black">
+    <article className="group relative overflow-hidden rounded-lg border border-white/10 bg-[#171a1a] transition hover:-translate-y-1 hover:border-[#ff4b00]/25">
+      <BorderTrail />
+      <div className="relative z-0 aspect-[4/3] overflow-hidden bg-black">
         <img className="h-full w-full object-cover transition duration-500 group-hover:scale-105" src={product.image} alt={title} />
         <div className="absolute left-3 top-3 rounded-md bg-black/70 px-2 py-1 text-xs font-semibold text-[#ff9b72]">
           {isStore ? 'ULIMA STORE' : 'ALUMNOS'}
@@ -19,7 +21,7 @@ export default function ProductCard({ product }) {
           <FavoriteButton id={product.id} />
         </div>
       </div>
-      <div className="space-y-3 p-4">
+      <div className="relative z-0 space-y-3 p-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{product.category}</p>
           <h3 className="mt-1 line-clamp-2 min-h-12 text-base font-bold text-white">{title}</h3>
